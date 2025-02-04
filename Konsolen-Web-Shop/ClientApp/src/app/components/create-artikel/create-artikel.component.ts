@@ -10,8 +10,8 @@ export class CreateArtikelComponent {
   categories: string[] = [];
   newCategory = '';
   categoriesJson = '';
-  previewImage: string | null = null;
-  fileName = '';
+  images: { file: File, preview: string }[] = [];
+  contextMenu = { visible: false, x: 0, y: 0, imageIndex: -1 };
 
   addCategory() {
     if (this.newCategory.trim()) {
@@ -30,25 +30,58 @@ export class CreateArtikelComponent {
     this.categoriesJson = JSON.stringify(this.categories);
   }
 
-  onFileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.fileName = file.name;
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewImage = reader.result as string;
-      };
-      reader.readAsDataURL(file);
+  onFilesSelected(event: Event) {
+    const files = (event.target as HTMLInputElement).files;
+    if (files) {
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.images.push({
+            file,
+            preview: reader.result as string
+          });
+        };
+        reader.readAsDataURL(file);
+      });
     }
   }
 
+  onDragStart(event: DragEvent, index: number) {
+    event.dataTransfer?.setData("imageIndex", index.toString());
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  onDrop(event: DragEvent, targetIndex: number) {
+    event.preventDefault();
+    const draggedIndex = Number(event.dataTransfer?.getData("imageIndex"));
+    if (draggedIndex !== targetIndex) {
+      const draggedImage = this.images[draggedIndex];
+      this.images.splice(draggedIndex, 1);
+      this.images.splice(targetIndex, 0, draggedImage);
+    }
+  }
+
+  onRightClick(event: MouseEvent, index: number) {
+    event.preventDefault();
+    this.contextMenu = {
+      visible: true,
+      x: event.clientX,
+      y: event.clientY,
+      imageIndex: index
+    };
+  }
+
   removeImage() {
-    this.previewImage = null;
-    this.fileName = '';
+    if (this.contextMenu.imageIndex > -1) {
+      this.images.splice(this.contextMenu.imageIndex, 1);
+      this.contextMenu.visible = false; // Kontextmenü schließen
+    }
   }
 
   submitBlogForm() {
-    // Hier implementierst du die Logik zum Senden des Formulars an den Server
     console.log('Blog erstellt:', this.blog);
   }
 }

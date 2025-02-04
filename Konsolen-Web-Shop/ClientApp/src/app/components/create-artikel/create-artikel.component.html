@@ -1,17 +1,6 @@
 <div class="container">
   <h1>Artikel Erstellen</h1>
   <form (ngSubmit)="submitBlogForm()" #blogForm="ngForm" enctype="multipart/form-data">
-    <label for="image">Bild hochladen:</label>
-    <div class="drop-area" (click)="fileInput.click()">
-      <p>Bild hierher ziehen oder klicken, um auszuwählen (Optional)</p>
-      <input type="file" id="image" #fileInput (change)="onFileSelected($event)" class="file-input" accept="image/*">
-      <div class="image-preview-container">
-        <img *ngIf="previewImage" [src]="previewImage" alt="Vorschaubild" class="preview-image">
-      </div>
-      <button *ngIf="previewImage" class="remove-image-button" (click)="removeImage()">Bild entfernen</button>
-    </div>
-    <p *ngIf="fileName" class="file-name">{{ fileName }}</p>
-
     <label for="title">Überschrift (max. 100 Zeichen, mindestens 10 Zeichen):</label>
     <input type="text" id="title" name="title" [(ngModel)]="blog.title" required #title="ngModel" minlength="10" maxlength="100">
     <div class="titleCount">{{ 100 - blog.title.length }} Zeichen frei</div>
@@ -33,6 +22,31 @@
 
     <input type="hidden" name="categories" [(ngModel)]="categoriesJson">
 
+    <label for="images">Bilder hochladen:</label>
+    <div class="drop-area" (click)="fileInput.click()">
+      <p>Bilder hierher ziehen oder klicken, um auszuwählen (Optional)</p>
+      <input type="file" id="images" #fileInput (change)="onFilesSelected($event)" class="file-input" accept="image/*" multiple>
+    </div>
+
+    <!-- Gitterdarstellung der Bilder -->
+    <div class="image-preview-container">
+      <div
+        class="image-preview"
+        *ngFor="let image of images; let i = index"
+        [attr.draggable]="true"
+        (dragstart)="onDragStart($event, i)"
+        (dragover)="onDragOver($event)"
+        (drop)="onDrop($event, i)"
+        (contextmenu)="onRightClick($event, i)">
+        <img [src]="image.preview" alt="Vorschaubild" class="preview-image" [style.height.px]="150" [style.width.px]="200">
+      </div>
+    </div>
+
     <button type="submit" class="submit-button" [disabled]="!blogForm.valid">Blog Post erstellen</button>
   </form>
+</div>
+
+<!-- Kontextmenü -->
+<div *ngIf="contextMenu.visible" class="context-menu" [style.top.px]="contextMenu.y" [style.left.px]="contextMenu.x">
+  <button (click)="removeImage()">Bild löschen</button>
 </div>
