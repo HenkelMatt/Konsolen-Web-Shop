@@ -1,0 +1,52 @@
+3. Datenbankmethoden (z. B. mit Entity Framework)
+3.1 Methode zum Hinzufügen eines Artikels:
+csharp
+Kopieren
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Konsolen_Web_Shop.Code.Class;
+
+namespace Konsolen_Web_Shop.Code
+{
+    public class ArticleService
+    {
+        private readonly ApplicationDbContext _context;
+
+        public ArticleService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public void AddArticle(Article article)
+        {
+            _context.Articles.Add(article);
+            _context.SaveChanges();
+        }
+    }
+}
+3.2 Methode zum Abrufen von Artikeln mit Bildern:
+csharp
+Kopieren
+public List<Article> GetArticlesWithImages()
+{
+    return _context.Articles
+        .Include(a => a.Images)
+        .Include(a => a.Categories)
+        .Include(a => a.Conditions)
+        .ToList();
+}
+3.3 Methode zum Hinzufügen von Bildern:
+csharp
+Kopieren
+public void AddImageToArticle(int articleID, byte[] imageData)
+{
+    var image = new Image
+    {
+        ArticleID = articleID,
+        ImageData = imageData
+    };
+
+    _context.Images.Add(image);
+    _context.SaveChanges();
+}

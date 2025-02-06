@@ -1,0 +1,80 @@
+1. Datenbankstruktur (Relationen)
+1.1 Tabelle: Articles
+sql
+Kopieren
+CREATE TABLE Articles (
+    ArticleID INT PRIMARY KEY AUTO_INCREMENT,
+    Title VARCHAR(255),
+    Description TEXT,
+    Price DECIMAL(10, 2),
+    Discount INT,
+    CreatedDate DATETIME
+);
+1.2 Tabelle: Conditions
+sql
+Kopieren
+CREATE TABLE Conditions (
+    ConditionID INT PRIMARY KEY AUTO_INCREMENT,
+    ConditionName VARCHAR(50)
+);
+1.3 Zwischentabelle: ArticleConditions
+sql
+Kopieren
+CREATE TABLE ArticleConditions (
+    ArticleID INT,
+    ConditionID INT,
+    PRIMARY KEY (ArticleID, ConditionID),
+    FOREIGN KEY (ArticleID) REFERENCES Articles(ArticleID),
+    FOREIGN KEY (ConditionID) REFERENCES Conditions(ConditionID)
+);
+1.4 Tabelle: Categories
+sql
+Kopieren
+CREATE TABLE Categories (
+    CategoryID INT PRIMARY KEY AUTO_INCREMENT,
+    CategoryName VARCHAR(100)
+);
+1.5 Zwischentabelle: ArticleCategories
+sql
+Kopieren
+CREATE TABLE ArticleCategories (
+    ArticleID INT,
+    CategoryID INT,
+    PRIMARY KEY (ArticleID, CategoryID),
+    FOREIGN KEY (ArticleID) REFERENCES Articles(ArticleID),
+    FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
+);
+1.6 Tabelle: Images
+sql
+Kopieren
+CREATE TABLE Images (
+    ImageID INT PRIMARY KEY AUTO_INCREMENT,
+    ArticleID INT,
+    ImageData BLOB,
+    FOREIGN KEY (ArticleID) REFERENCES Articles(ArticleID)
+);
+1.7 Tabelle: Users
+sql
+Kopieren
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    Username VARCHAR(100) UNIQUE,
+    Email VARCHAR(100),
+    PhoneNumber VARCHAR(15),
+    CreatedDate DATETIME
+);
+1.8 Tabelle: Employees
+sql
+Kopieren
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    Username VARCHAR(100) UNIQUE,
+    Email VARCHAR(100),
+    PhoneNumber VARCHAR(15),
+    CreatedDate DATETIME,
+    Role VARCHAR(50)  -- Rechte wie "Admin", "Manager", etc.
+);
