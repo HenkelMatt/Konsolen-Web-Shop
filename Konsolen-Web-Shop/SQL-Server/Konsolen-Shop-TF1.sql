@@ -38,10 +38,12 @@ CREATE TABLE `ProductImages` (
 -- Tabelle für Kategorien (Category) mit Eltern-Kind-Beziehung
 CREATE TABLE `Category` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `ParentID` int(11) DEFAULT NULL,  -- Referenz auf die Elternkategorie (NULL bedeutet Hauptkategorie)
   `Name` varchar(64) CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL,  -- Name der Kategorie
+  `ParentID` int(11) DEFAULT NULL,  -- Referenz auf die Elternkategorie (NULL bedeutet Hauptkategorie)
+  `ConsoleTypID` int(11) DEFAULT NULL,  -- Referenz auf die Elternkategorie (NULL bedeutet Hauptkategorie)
   PRIMARY KEY (`ID`),
-  FOREIGN KEY (`ParentID`) REFERENCES `Category`(`ID`) ON DELETE CASCADE
+  FOREIGN KEY (`ParentID`) REFERENCES `Category`(`ID`) ON DELETE CASCADE,
+  FOREIGN KEY (`ConsoleTypID`) REFERENCES `Category`(`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Zwischentabelle für die m:n Beziehung zwischen Produkt und Kategorie
@@ -66,61 +68,55 @@ CREATE TABLE `UserProductItem` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Einfügen der vorgefertigten Kategorien mit Hierarchie (Hersteller, Konsolen, Varianten)
-INSERT INTO `Category` (`Name`, `ParentID`) VALUES
+INSERT INTO `Category` (`Name`, `ParentID`, `ConsoleTypID`) VALUES
 -- Firmenkategorien (Nintendo, PlayStation, Xbox)
-('Nintendo', NULL),
-('PlayStation', NULL),
-('Xbox', NULL),
+('Nintendo', NULL, NULL),
+('PlayStation', NULL, NULL),
+('Xbox', NULL, NULL),
 
 -- Konsolenarten (Handheld, Home Console, Hybrid)
-('Handheld', NULL),
-('Home Console', NULL),
-('Hybrid', NULL),
+('Handheld', NULL, NULL),
+('Home Console', NULL, NULL),
+('Hybrid', NULL, NULL),
 
--- Konsolen und Varianten unter Nintendo
-('GameBoy', 1),
-('GameBoy Color', 1),
-('GameBoy Advance', 1),
-('Nintendo DS', 1),
-('Nintendo 3DS', 1),
-('Nintendo Switch Lite', 1),
+-- Varianten unter den Nintendo Heimkonsole
+('Nintendo Entertainment System (NES)', 1, 5), -- Heimkonsole
+('Super Nintendo Entertainment System (SNES)', 1, 5), 
+('Nintendo 64', 1, 5), 
+('Nintendo GameCube', 1, 5), 
+('Nintendo Wii', 1, 5), 
+('Nintendo Wii U', 1, 5),
 
 -- Varianten unter den Nintendo Handhelds
-('GameBoy Original', 2),
-('GameBoy Color', 3),
-('GameBoy Advance SP', 4),
-('Nintendo DS', 5),
-('Nintendo 3DS XL', 6),
-('New Nintendo 3DS', 7),
-('Nintendo Switch Lite', 8),
+('GameBoy', 1, 4), -- 'GameBoy' unter 'Nintendo' und als Handheld
+('GameBoy Advance', 1, 4),
+('Nintendo DS', 1, 4),
+('Nintendo 3DS', 1, 4),
+
+-- Varianten unter den Nintendo Hybrid
+('Nintendo Switch', 1, 6),
 
 -- Konsolen und Varianten unter PlayStation
-('Playstation 1', 2),
-('Playstation 2', 2),
-('Playstation 3', 2),
-('Playstation 4', 2),
-('Playstation 5', 2),
-('PS Vita', 2),
+('Playstation 1', 2, 5), -- 'Playstation 1' unter 'PlayStation' und als Home Console
+('Playstation 2', 2, 5),
+('Playstation 3', 2, 5),
+('Playstation 4', 2, 5),
+('Playstation 5', 2, 5),
+('PSP', 2, 4),  -- 'PSP' als Handheld
+('PS Vita', 2, 4),  -- 'PS Vita' als Handheld
 
 -- Varianten unter den PlayStation Konsolen
-('Playstation 1 Slim', 10),
-('Playstation 2 Slim', 11),
-('Playstation 3 Super Slim', 12),
-('Playstation 4 Pro', 13),
-('Playstation 4 Slim', 14),
-('PS Vita Slim', 16),
-
--- Konsolen und Varianten unter Xbox
-('Xbox 360', 3),
-('Xbox One', 3),
-('Xbox Series X', 3),
-
--- Varianten unter den Xbox Konsolen
-('Xbox One S', 17),
-('Xbox One X', 18),
-
--- Konsolen unter Hybrid
-('Nintendo Switch', 4),
-
--- Varianten unter Hybrid Konsolen
-('Nintendo Switch OLED', 19);
+('Playstation 1 First', 18, 5),
+('Playstation 1 One', 18, 5),
+('Playstation 2 First', 19, 5),
+('Playstation 2 Slim', 19, 5),
+('Playstation 3 First', 20, 5),
+('Playstation 3 Slim', 20, 5),
+('Playstation 3 Super Slim', 20, 5),
+('Playstation 4 First', 21, 5),
+('Playstation 4 Pro', 21, 5),
+('Playstation 4 Slim', 21, 5),
+('Playstation 5 Pro', 22, 5),
+('PSP 1000', 23, 4),
+('PS Vita OLED', 24, 4),
+('PS Vita Slim', 24, 4);

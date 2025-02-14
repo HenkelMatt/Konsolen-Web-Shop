@@ -13,6 +13,8 @@ import {TestjmabsdComponent} from "./Commen/testjmabsd/testjmabsd.component";
 import {CounterTestComponent} from "./Commen/counterTest/counter-test.component";
 import {WishListComponent} from "./Commen/wish-list/wish-list.component";
 import {CreateArtikelComponent} from "./components/create-artikel/create-artikel.component";
+import {LoginComponent} from "./components/Login/Login.component";
+import {ShopComponent} from "./components/Shop/Shop.component";
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import {CreateArtikelComponent} from "./components/create-artikel/create-artikel
     TestjmabsdComponent,
     CounterTestComponent,
     WishListComponent,
-    CreateArtikelComponent
+    CreateArtikelComponent,
+    LoginComponent,
+    ShopComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
