@@ -13,7 +13,7 @@ import {TestjmabsdComponent} from "./Commen/testjmabsd/testjmabsd.component";
 import {CounterTestComponent} from "./Commen/counterTest/counter-test.component";
 import {WishListComponent} from "./Commen/wish-list/wish-list.component";
 import {CreateArtikelComponent} from "./components/create-artikel/create-artikel.component";
-import {LoginComponent} from "./components/Login/Login.component";
+import {LoginSignupComponent} from "./components/login-signup/login-signup.component";
 import {ShopComponent} from "./components/Shop/Shop.component";
 
 @NgModule({
@@ -27,7 +27,7 @@ import {ShopComponent} from "./components/Shop/Shop.component";
     CounterTestComponent,
     WishListComponent,
     CreateArtikelComponent,
-    LoginComponent,
+    LoginSignupComponent,
     ShopComponent
   ],
   imports: [
